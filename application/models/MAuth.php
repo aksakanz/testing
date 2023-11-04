@@ -1,17 +1,11 @@
 <?php
 class MAuth extends CI_Model
 {
-    public function check_login($email, $password)
+    public function check_login($username, $password)
     {
-        $this->db->where('email', $email);
+        $this->db->where('username', $username);
         $this->db->where('password', $password);
-        $result = $this->db->get('user', 1);
+        $result = $this->db->get('user');
         return $result;
     }
-
-    function updateUser($where, $data, $table)
-	{
-		$this->db->where($where);
-		$this->db->update($table, $data);
-	}
 }

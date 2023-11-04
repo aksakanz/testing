@@ -3,8 +3,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>Career PT Infomedia Nusantara</title>
-	<link rel="icon" type="image/x-icon" href="<?= base_url('assets/img/logo.png'); ?>">
+	<title>Selamat datang di PT Four Best Synergy</title>
 	<link href="<?= base_url('assets/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
 	<link href="<?= base_url('assets/css/index.css') ?>" rel="stylesheet">
 	<link href="<?= base_url('assets/fa/css/all.min.css') ?>" rel="stylesheet">
@@ -15,98 +14,45 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<a class="navbar-brand" href="<?= site_url('index'); ?>">
-				<img src="<?= base_url('assets/img/logo.png'); ?>" alt="PT Infomedia Nusantara" style="max-width: 100px; height: auto;"> <!-- Adjust the max-width to control the size -->
-			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link active" href="<?= site_url('index'); ?>">Job Vacancy</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="<?= site_url('index/company'); ?>">Company</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="<?= site_url('index/contact'); ?>">Contact</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="<?= site_url('index/login'); ?>">Masuk</a>
-					</li>
-				</ul>
+	<form action="<?= site_url('auth/login'); ?>" method="post">
+		<section class="vh-100" style="background-color: #508bfc;">
+			<div class="alert alert-secondary">
+				untuk absensi karyawan <a href="<?= site_url('Index/Presence'); ?>">Klik disini</a>
 			</div>
-		</div>
-	</nav>
+			<div class="container py-5 h-100">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+						<div class="card shadow-2-strong" style="border-radius: 1rem;">
+							<div class="card-body p-5 text-center">
+								<?php
+								if ($this->session->flashdata('msg')) {
+									echo "<div class='alert alert-danger' role='alert'>" . $this->session->flashdata('msg') . "</div>";
+								}
+								?>
+								<h3 class="mb-5">Sign in</h3>
 
+								<div class="form-outline mb-4">
+									<input type="username" id="typeEmailX-2" class="form-control form-control-lg" name="username" />
+									<label class="form-label" for="typeEmailX-2">Username</label>
+								</div>
 
+								<div class="form-outline mb-4">
+									<input type="password" id="typePasswordX-2" class="form-control form-control-lg" name="password" />
+									<label class="form-label" for="typePasswordX-2">Password</label>
+								</div>
 
-
-
-	<div class="container mt-5">
-		<div class="alert alert-warning" role="alert">
-
-			<strong> PERHATIAN <i class="fa-solid fa-exclamation"></i></strong>
-			Seleksi penerimaan karyawan PT Infomedia Nusantara tidak dipungut biaya apapun selama proses rekrutmen berlangsung.
-		</div>
-		<center>
-			<h1>Lowongan Pekerjaan Yang Tersedia</h1>
-			<h6>Penempatan departemen disesuaikan dengan hasil tes</h6>
-		</center>
-
-		<br>
-
-		<div class="container">
-			<?php foreach ($items as $item) : ?>
-				<?php if ($item->jobv_status == 1) : // Cek status pekerjaan 
-				?>
-					<div class="p-3 mb-2 bg-light text-dark">
-						<h4><?= $item->jobv_title; ?></h4>
-						<p><?= $item->jobv_desc; ?></p>
-						<div class="row">
-							<div class="col-md-2">
-								<p class="text-info">Requirements</p>
-							</div>
-							<div class="col-md-8">
-								<?php foreach ($item->jobv_requirement as $requirement) : ?>
-									<span class="badge rounded-pill text-bg-secondary"><?= $requirement; ?></span>
-								<?php endforeach; ?>
+								<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 							</div>
 						</div>
-						<br>
-						<div class="row">
-							<div class="col-md-2">
-								<p class="text-info">Majors</p>
-							</div>
-							<div class="col-md-8">
-								<?php foreach ($item->jobv_major as $major) : ?>
-									<span class="badge rounded-pill text-bg-secondary"><?= $major; ?></span>
-								<?php endforeach; ?>
-							</div>
-						</div><br>
-						<center>
-							<a href="<?= site_url('index/applyJob/' . $item->jobv_id); ?>" class="btn btn-primary">Apply</a>
-						</center>
 					</div>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		</div>
-	</div><br>
+				</div>
+			</div>
+		</section>
+	</form>
 
 
-
-	</div>
-
-
-
-	<footer class="footer bg-dark text-light text-center">
-		<div class="container">
-			<p>&copy; <?php echo date('Y'); ?> BrainProfiler. All rights reserved.</p>
-		</div>
-	</footer>
+	<script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
+	<script src="<?= base_url('assets/js/jquery.dataTables.min.js') ?>"></script>
 
 </body>
 
