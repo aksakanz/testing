@@ -10,13 +10,13 @@ class Payroll extends CI_Controller
 
     function search()
     {
-        $year   = $this->input->post('year');
-        $month  = $this->input->post('month');
+        $year                   = $this->input->post('year');
+        $month                  = $this->input->post('month');
 
-        $data['presenceData'] = $this->GetData->getPresence($year, $month);
+        $data['presenceData']   = $this->GetData->getPresence($year, $month);
 
-        $data['title']      = "Payroll Karyawan";
-        $data['content']    = 'payroll/indexPayroll';
+        $data['title']          = "Payroll Karyawan";
+        $data['content']        = 'payroll/indexPayroll';
         $this->load->view('dashboard', $data);
     }
 
@@ -25,10 +25,8 @@ class Payroll extends CI_Controller
         $data['employeeName']       = $this->GetData->getEmployeeName($employeeId);
         $data['employeePosition']   = $this->GetData->getEmployeePosition($employeeId);
         $data['payrollData']        = $this->GetData->getPayrollDetails($employeeId);
-
-        // Menambahkan penanganan jika countPresenceByEmployeeId mengembalikan 0
-        $countHadir = $this->GetData->countPresenceByEmployeeId($employeeId);
-        $data['countHadir'] = $countHadir;
+        $countHadir                 = $this->GetData->countPresenceByEmployeeId($employeeId);
+        $data['countHadir']         = $countHadir;
 
         $data['title'] = "Detail Payroll";
         $data['content'] = 'payroll/detailPayroll';

@@ -30,110 +30,109 @@
                         <?= $row->year; ?>
                     </div>
                 </div>
-            <?php endforeach ?>
 
-            <?php
-            $jumlah_hadir = $countHadir;
-            $total_jam_kerja = $totalWorkHours;
-            $employeePosition = $employeePosition;
+                <?php if ($countHadir > 0) : ?>
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Jumlah Hadir Dalam Sebulan</p>
+                        </div>
+                        <div class="col-8">
+                            <?= $countHadir; ?> / <?= cal_days_in_month(CAL_GREGORIAN, date('n'), date('Y')); ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
-            if ($employeePosition == 'Staff') {
-                $upah_per_jam = 30000;
-            } elseif ($employeePosition == 'Manager') {
-                $upah_per_jam = 50000;
-            } else {
-                $upah_per_jam = 0;
-            }
-
-            $upah_kotor = $jumlah_hadir * $total_jam_kerja * $upah_per_jam;
-
-            $pajak_penghasilan = 0;
-
-            if ($employeePosition == 'Staff') {
-                $pajak_penghasilan = 0.05 * $upah_kotor;
-            } elseif ($employeePosition == 'Manager') {
-                $pajak_penghasilan = 0.1 * $upah_kotor;
-            }
-            ?>
-
-            <div class="row">
-                <div class="col-3">
-                    <p>Jumlah Hadir Dalam Sebulan</p>
-                </div>
-                <div class="col-8">
-                    <?= $countHadir; ?>
-                    <?php
-                    $bulan_ini = date('n');
-                    $tahun_ini = date('Y');
-                    $jumlah_hari = cal_days_in_month(CAL_GREGORIAN, $bulan_ini, $tahun_ini);
-                    echo "/ " . $jumlah_hari;
-                    ?>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-3">
-                    <p>Total Jam Kerja</p>
-                </div>
-                <div class="col-8">
-                    <?= $totalWorkHours; ?> Jam
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-3">
-                    <p>Jabatan</p>
-                </div>
-                <div class="col-8">
-                    <b><?= $employeePosition; ?></b>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-3">
-                    <p>Upah Per Jam</p>
-                </div>
-                <div class="col-8">
-                    <b>IDR
+                <div class="row">
+                    <div class="col-3">
+                        <p>Total Jam Kerja</p>
+                    </div>
+                    <div class="col-8">
                         <?php
-                        if ($employeePosition == 'Staff') {
-                            echo "30.000";
-                        } elseif ($employeePosition == 'Manager') {
-                            echo "50.000";
+                        if ($row->checkIn && $row->checkOut) {
+                            $checkInTime = new DateTime($row->checkIn);
+                            $checkOutTime = new DateTime($row->checkOut);
+                            $interval = $checkInTime->diff($checkOutTime);
+                            $totalHours = $interval->h + ($interval->i / 60) + ($interval->s / 3600);
+                            echo $totalHours . " Jam";
+                            $upah_per_jam = ($employeePosition == 'Staff') ? 30000 : 50000;
+                            $upah_kotor = $totalHours * $upah_per_jam;
+                        } else {
+                            echo 'Tidak ada data CheckIn atau CheckOut.';
                         }
                         ?>
-                    </b>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-3">
-                    <p>Upah Kotor</p>
+                <div class="row">
+                    <div class="col-3">
+                        <p>Jabatan</p>
+                    </div>
+                    <div class="col-8">
+                        <b><?= $employeePosition; ?></b>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <b>IDR <?= number_format($upah_kotor, 0, ',', '.'); ?></b>
-                    <small>(Jumlah Hadir * Total Jam Kerja * Upah Perjam)</small>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-3">
-                    <p>Pajak Penghasilan</p>
+                <div class="row">
+                    <div class="col-3">
+                        <p>Upah Per Jam</p>
+                    </div>
+                    <div class="col-8">
+                        <b>IDR
+                            <?php
+                            if ($employeePosition == 'Staff') {
+                                echo "30.000";
+                            } elseif ($employeePosition == 'Manager') {
+                                echo "50.000";
+                            }
+                            ?>
+                        </b>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <b>IDR <?= number_format($pajak_penghasilan, 0, ',', '.'); ?></b> <small>(Upah Kotor * 5%)</small>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-3">
-                    <p>Upah Bersih</p>
+                <div class="row">
+                    <div class="col-3">
+                        <p>Upah Kotor</p>
+                    </div>
+                    <div class="col-8">
+                        <b>IDR <?= number_format($upah_kotor, 0, ',', '.'); ?></b>
+                        <small>(Total Jam Kerja * Upah Per Jam)</small>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <b>IDR <?= number_format($upah_kotor - $pajak_penghasilan, 0, ',', '.'); ?></b> <small>(Upah Kotor - Pajak Penghasilan)</small>
-                </div>
-            </div>
 
+                <div class="row">
+                    <div class="col-3">
+                        <p>Pajak Penghasilan</p>
+                    </div>
+                    <div class="col-8">
+                        <b>IDR
+                            <?php
+                            $pajak_penghasilan = $upah_kotor * 0.05;
+
+                            echo number_format($pajak_penghasilan, 0, ',', '.');
+                            ?>
+                        </b> <small>(Upah Kotor * 5%)</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3">
+                        <p>Denda Penghasilan</p>
+                    </div>
+                    <div class="col-8">
+                        <b>IDR <?= $row->denda; ?></b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3">
+                        <p>Upah Bersih</p>
+                    </div>
+                    <div class="col-8">
+                        <b>IDR <?= number_format($upah_kotor - $pajak_penghasilan - $denda, 0, ',', '.'); ?></b> <small>(Upah Kotor - Pajak Penghasilan)</small>
+                    </div>
+                </div>
+
+            <?php endforeach; ?>
         </div>
     </div>
     <script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
